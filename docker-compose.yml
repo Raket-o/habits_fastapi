@@ -1,0 +1,26 @@
+#docker-compose.yml
+version: "2"
+
+services:
+  app:
+    build: .
+    container_name: fastapi
+    stop_signal: SIGKILL
+    ports:
+      - "8000:8000"
+    volumes:
+     - ./app/database/db/:/app/app/database/db/
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+    networks:
+      app_network:
+        ipv4_address: 192.168.55.3
+
+networks:
+  app_network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.55.0/24
+          gateway: 192.168.55.1
