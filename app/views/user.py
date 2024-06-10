@@ -12,7 +12,7 @@ from app.database.transactions import (
 )
 from app.schemas import books
 
-router = APIRouter(prefix="/books", tags=["books"])
+router = APIRouter(prefix="/users", tags=["users"])
 
 
 @router.get(

@@ -4,37 +4,37 @@ from datetime import datetime
 from sqlalchemy.future import select
 
 from app.database.connect import engine, session
-from app.database.models import Book, Task, User
+from app.database.models import Habit, TrackingHabit, User
 
 
 async def filling_db() -> None:
     """the function of filling the database with data of this"""
-    async with engine.begin() as conn:
+    async with engine.begin() as _:
         res = await session.execute(select(User))
         if not len(res.all()):
             print("*" * 70)
 
-            books = [
-                Book(name="Book1"),
-                Book(name="Book2"),
-                Book(name="Book3"),
-                Book(name="Book4"),
-                Book(name="Book5"),
-            ]
-            session.add_all(books)
-
             users = [
-                User(username="top", password="pass"),
-                User(username="money", password="pass"),
-                User(username="jonn", password="pass"),
+                User(id=1, username="top", password="pass", telegram_id=1),
+                User(id=2, username="money", password="pass", telegram_id=2),
+                User(id=3, username="jonn", password="pass", telegram_id=3, is_active=False),
             ]
             session.add_all(users)
 
-            tasks = [
-                Task(name="go to shop", created_datetime=datetime.now().replace(day=5, microsecond=0), user_id=1),
-                Task(name="go to home", created_datetime=datetime.now().replace(day=10, microsecond=0), user_id=2),
-                Task(name="go to ocean", created_datetime=datetime.now().replace(day=15, microsecond=0), user_id=3),
+            habits = [
+                Habit(id=1, user_id=1, name_habit="breakfast"),
+                Habit(id=2, user_id=2, name_habit="lunch"),
+                Habit(id=3, user_id=3, name_habit="dinner"),
+
             ]
-            session.add_all(tasks)
+            session.add_all(habits)
+
+            tracking_habits = [
+                TrackingHabit(id=1, habit_id=1),
+                TrackingHabit(id=2, habit_id=2, count=5),
+                TrackingHabit(id=3, habit_id=3, count=10),
+
+            ]
+            session.add_all(tracking_habits)
 
             await session.commit()

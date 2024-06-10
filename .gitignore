@@ -9,6 +9,8 @@ text.txt
 grafana/
 .flake8
 postgesql/
+postgresql/
+postgresql
 app/database/db/
 
 # C extensions

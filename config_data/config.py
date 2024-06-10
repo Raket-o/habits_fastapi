@@ -9,6 +9,13 @@ if not find_dotenv():
 else:
     load_dotenv()
 
-SECRET_KEY = os.getenv("SECRET_KEY")
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
+DB_USER = os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_HOST = "192.168.55.4"
+DB_PORT = os.getenv("DB_PORT")
+DB_NAME = "habits"
+DB_TESTS = True if os.getenv("DB_TESTS") == "True" else False
+
+# SECRET_KEY = os.getenv("SECRET_KEY")
+# ALGORITHM = "HS256"
+# ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))

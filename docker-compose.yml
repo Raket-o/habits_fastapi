@@ -2,19 +2,53 @@
 version: "2"
 
 services:
-  app:
-    build: .
-    container_name: fastapi
-    stop_signal: SIGKILL
+  postgres_db:
+    image: postgres
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=habits
+    restart: always
     ports:
-      - "8000:8000"
-    volumes:
-     - ./app/database/db/:/app/app/database/db/
-    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
-
+      - 5434:${DB_PORT}
+    volumes: [ './postgresql/db/:/var/lib/postgresql/data/', './postgresql/db/:/logs/' ]
+#    command: [ "postgres", "-c", "log_destination=stderr", "-c", "logging_collector=on", "-c", "log_directory=/logs", "-c", "log_filename=postgresql.log", "-c", "log_statement=all" ]
+    command: ["postgres", "-c", "log_statement=all"]
+    expose:
+      - 5434
     networks:
       app_network:
-        ipv4_address: 192.168.55.3
+        ipv4_address: 192.168.55.4
+
+#  app:
+#    build: .
+#    container_name: fastapi
+#    stop_signal: SIGKILL
+#    restart: always
+#    ports:
+#      - "8000:8000"
+##    volumes:
+##      - ./app/medias:/app/medias
+#    depends_on:
+#      - postgres_db
+#    networks:
+#      app_network:
+#        ipv4_address: 192.168.55.5
+
+#  app:
+#    build: .
+#    container_name: fastapi
+#    stop_signal: SIGKILL
+#    ports:
+#      - "8000:8000"
+#    volumes:
+#     - ./app/database/db/:/app/app/database/db/
+#    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+#
+#    networks:
+#      app_network:
+#        ipv4_address: 192.168.55.5
 
 networks:
   app_network:
