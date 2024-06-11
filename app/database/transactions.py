@@ -1,4 +1,6 @@
 """module for working with transactions"""
+import asyncpg
+
 from sqlalchemy import and_, update
 from sqlalchemy.future import select
 
