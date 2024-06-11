@@ -18,8 +18,6 @@ class User(Base):
     telegram_id = Column(Integer, nullable=False, unique=True)
     is_active = Column(Boolean, default=True)
 
-    # habit = relationship('Habit', backref='username', cascade='all, delete')
-
     habit = relationship(
         "Habit",
         cascade="all, delete",
@@ -27,6 +25,9 @@ class User(Base):
         passive_deletes=True,
         lazy=True,
     )
+
+    def to_json(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
 class Habit(Base):

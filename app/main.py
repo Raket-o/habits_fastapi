@@ -1,18 +1,15 @@
 """the main module"""
 import uvicorn
 
-from asyncpg.exceptions import InvalidCatalogNameError
-
 from fastapi import FastAPI, APIRouter
-# from app.api.auth import router as auth_router
-# from app.api.books import router as books_router
 from contextlib import asynccontextmanager
 
 from app.database.connect import Base, engine, session
 from app.utils.filling_data_base import filling_db
+from app.views.user import router as user_router
+
 from config_data.config import DB_TESTS
 # from app.database.transactions import create_db
-
 
 
 @asynccontextmanager
@@ -26,7 +23,7 @@ async def lifespan(app: FastAPI):
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
 
-    await filling_db()
+    # await filling_db()
 
     yield
     await session.close()
@@ -36,8 +33,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 api_router = APIRouter(prefix='/api')
-# api_router.include_router(auth_router)
-# api_router.include_router(books_router)
+api_router.include_router(user_router)
 
 app.include_router(api_router)
 

@@ -4,27 +4,17 @@ from typing import List
 from pydantic import BaseModel
 
 
-class Following(BaseModel):
+class GetUser(BaseModel):
     """Return response data"""
     id: int
-    name: str
+    username: str
+    password: str
+    telegram_id: int
+    is_active: bool
 
 
-class Follower(BaseModel):
+class CreateUser(BaseModel):
     """Return response data"""
-    id: int
-    name: str
-
-
-class User(BaseModel):
-    """Return response data"""
-    id: int
-    name: str
-    followers: List[Follower]
-    following: List[Following]
-
-
-class UserInfo(BaseModel):
-    """Return response data"""
-    result: bool
-    user: User
+    username: str
+    password: str
+    telegram_id: int

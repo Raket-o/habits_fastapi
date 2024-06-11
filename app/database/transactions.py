@@ -7,7 +7,7 @@ from sqlalchemy.future import select
 from app.database.connect import engine, session
 
 from config_data.config import DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_TESTS, DB_USER
-# from app.database.models import Book, User
+from app.database.models import User
 
 
 async def create_db() -> None:
@@ -25,18 +25,18 @@ async def create_db() -> None:
 #     return qs.all()
 #
 #
-# async def get_detail_book_db(id_book: int) -> Book:
-#     """the function returns the details of the book in database"""
-#     qs = await session.execute(select(Book).where(Book.id == id_book))
-#     return qs.scalar()
-#
-#
-# async def add_book_db(obj_add_book) -> Book:
-#     """the function adds a new book in database"""
-#     book = Book(**obj_add_book)
-#     session.add(book)
-#     await session.commit()
-#     return book
+async def get_user_by_telegram_id_db(telegram_id: int) -> User:
+    """ """
+    qs = await session.execute(select(User).where(User.telegram_id == telegram_id))
+    return qs.scalar()
+
+
+async def create_user_db(obj_add_book) -> User:
+    """the function adds a new book in database"""
+    user = User(**obj_add_book)
+    session.add(user)
+    await session.commit()
+    return user
 #
 #
 # async def patch_book_db(id_book: int, obj_add_book) -> bool:

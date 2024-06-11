@@ -16,6 +16,6 @@ DB_PORT = os.getenv("DB_PORT")
 DB_NAME = "habits"
 DB_TESTS = True if os.getenv("DB_TESTS") == "True" else False
 
-# SECRET_KEY = os.getenv("SECRET_KEY")
-# ALGORITHM = "HS256"
+SECRET_KEY = os.getenv("SECRET_KEY")
+ALGORITHM = "HS256"
 # ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))

@@ -5,7 +5,7 @@ from fastapi.security import OAuth2PasswordBearer
 from app.database.transactions import check_username_password_db, set_token_user, get_user_by_token
 from app.schemas.users import User
 from app.schemas.token import Token
-from app.utils.create_access_token import create_access_token
+from app.utils.token import create_access_token
 
 
 router = APIRouter(prefix="/auth", tags=["auth"])
