@@ -150,4 +150,4 @@ async def read_own_items(
 
 if __name__ == "__main__":
     # uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
-    uvicorn.run("token_operations:app", reload=True)
+    uvicorn.run("token_operations:app", reload=True, port=8080)

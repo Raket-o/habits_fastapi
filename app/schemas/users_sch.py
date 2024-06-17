@@ -8,7 +8,6 @@ class GetUser(BaseModel):
     """Return response data"""
     id: int
     username: str
-    password: str
     telegram_id: int
     is_active: bool
 

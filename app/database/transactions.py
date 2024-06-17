@@ -31,12 +31,18 @@ async def get_user_by_telegram_id_db(telegram_id: int) -> User:
     return qs.scalar()
 
 
-async def create_user_db(obj_add_book) -> User:
+async def create_user_db(dict_add_user) -> User:
     """the function adds a new book in database"""
-    user = User(**obj_add_book)
+    user = User(**dict_add_user)
     session.add(user)
     await session.commit()
     return user
+
+
+# async def check_user_is_active_db(telegram_id: int) -> User:
+#     """the function adds a new book in database"""
+#     qs = await session.execute(select(User).where(User.telegram_id == telegram_id))
+#     return qs.scalar()
 #
 #
 # async def patch_book_db(id_book: int, obj_add_book) -> bool:

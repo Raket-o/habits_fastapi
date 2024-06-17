@@ -1,29 +1,47 @@
 """books routs processing module"""
 from typing import Any, Dict
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Depends, Request
+from typing import Annotated
 
 from app.database.models import User
 from app.database.transactions import (
     get_user_by_telegram_id_db,
     create_user_db,
-#     get_list_books_db,
-#     get_detail_book_db,
-#     add_book_db, delete_book_db,
-#     patch_book_db
 )
-from app.schemas import users
+from app.schemas.users_sch import CreateUser, GetUser
+from app.schemas.token_sch import Token
 
 
 router = APIRouter(prefix="/users", tags=["users"])
 
+
 @router.get(
     path="/<int:telegram_id>",
     response_description="users.GetUser",
-    response_model=users.GetUser,
+    response_model=GetUser,
     response_model_exclude_unset=True,
     status_code=200,
 )
+# async def get_user_by_telegram_id(_: Request, current_user: Annotated[User, Depends()]) -> User | dict[str, str | int]:
+# # async def get_user_by_telegram_id(_: Request, telegram_id: int) -> User | dict[str, str | int]:
+#     """ """
+#
+#
+#     # res = await get_user_by_telegram_id_db(telegram_id)
+#
+#     # if res:
+#     #     return res
+#     # else:
+#     return {
+#         "id": 0,
+#         "username": "none",
+#         "password": "none",
+#         "telegram_id": 0,
+#         "is_active": "false"
+#     }
+
+
 async def get_user_by_telegram_id(_: Request, telegram_id: int) -> User | dict[str, str | int]:
     """ """
     res = await get_user_by_telegram_id_db(telegram_id)
@@ -43,13 +61,25 @@ async def get_user_by_telegram_id(_: Request, telegram_id: int) -> User | dict[s
 @router.post(
     path="/",
     response_description="users.GetUser",
-    response_model=users.GetUser,
+    response_model=Token,
     status_code=201
 )
-async def create_user(_: Request, data: users.CreateUser) -> User:
+async def create_user(_: Request, data: CreateUser) -> dict[str, Any]:
     """ """
-    user = await create_user_db(data.model_dump())
-    return user.to_json()
+    data = data.model_dump()
+    """---------------------------------------------------------------------------------"""
+    from passlib.context import CryptContext
+    pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+    data["hashed_password"] = pwd_context.hash(data["password"])
+    data.pop("password")
+    """---------------------------------------------------------------------------------"""
+    user = await create_user_db(data)
+
+    from app.utils.token import create_access_token
+    token = create_access_token(data={"telegram_id":data["telegram_id"]})
+    print("+="*50, token)
+    # return user.to_json()
+    return {"access_token": token}
 
 
 

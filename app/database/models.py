@@ -14,8 +14,10 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String(20), nullable=False)
-    password = Column(String(200), nullable=False)
-    telegram_id = Column(Integer, nullable=False, unique=True)
+    # password = Column(String(200), nullable=False)
+    hashed_password = Column(String(200), nullable=False)
+    # telegram_id = Column(Integer, nullable=False, unique=True)
+    telegram_id = Column(Integer, nullable=False)
     is_active = Column(Boolean, default=True)
 
     habit = relationship(
@@ -39,7 +41,14 @@ class Habit(Base):
     name_habit = Column(String(20), nullable=False)
     description = Column(String(200), nullable=True)
 
-    tracking_habit = relationship('TrackingHabit', backref='habits', cascade='all, delete')
+    # tracking_habit = relationship('TrackingHabit', backref='habits', cascade='all, delete')
+    tracking_habit = relationship(
+        "TrackingHabit",
+        cascade="all, delete",
+        backref="habits",
+        passive_deletes=True,
+        lazy=True,
+    )
 
 
 class TrackingHabit(Base):

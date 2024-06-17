@@ -6,7 +6,7 @@ from contextlib import asynccontextmanager
 
 from app.database.connect import Base, engine, session
 from app.utils.filling_data_base import filling_db
-from app.views.user import router as user_router
+from app.api.user_api import router as user_router
 
 from config_data.config import DB_TESTS
 # from app.database.transactions import create_db

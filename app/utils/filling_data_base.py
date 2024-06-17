@@ -15,9 +15,10 @@ async def filling_db() -> None:
             print("*" * 70)
 
             users = [
-                User(id=1, username="top", password="pass", telegram_id=1),
-                User(id=2, username="money", password="pass", telegram_id=2),
-                User(id=3, username="jonn", password="pass", telegram_id=3, is_active=False),
+                # User(id=1, username="top", hashed_password="pass1", telegram_id=1),
+                User(id=1, username="top", password="pass1", telegram_id=1),
+                User(id=2, username="money", password="pass2", telegram_id=2),
+                User(id=3, username="jonn", password="pass3", telegram_id=3, is_active=False),
             ]
             session.add_all(users)
 

@@ -2,9 +2,9 @@ from fastapi import APIRouter,  HTTPException, Request
 
 from fastapi.security import OAuth2PasswordBearer
 
-from app.database.transactions import check_username_password_db, set_token_user, get_user_by_token
-from app.schemas.users import User
-from app.schemas.token import Token
+# from app.database.transactions import check_username_password_db, set_token_user, get_user_by_token
+from app.schemas.users_sch import User
+from app.schemas.token_sch import Token
 from app.utils.token import create_access_token
 
 
