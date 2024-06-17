@@ -16,7 +16,7 @@ from app.schemas.token_sch import Token
 router = APIRouter(prefix="/users", tags=["users"])
 
 
-@router.get(
+@router.post(
     path="/<int:telegram_id>",
     response_description="users.GetUser",
     response_model=GetUser,
