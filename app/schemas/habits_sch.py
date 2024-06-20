@@ -1,24 +1,31 @@
+from datetime import time
 from typing import List
-
 from pydantic import BaseModel
 
 
-# class Habit(BaseModel):
-#     ...
-
-class Habit(BaseModel):
+class HabitSchemas(BaseModel):
     id: int
-    user_id: int
     name_habit: str
     description: str
+    alert_time: time
+    count: int
 
 
-class ListBooks(BaseModel):
+class ListBooksSchemas(BaseModel):
     """Validate request data"""
-    habits: List[Habit]
+    habits: List[HabitSchemas]
 
 
-class CreateHabit(BaseModel):
-    # user_id: int
+class CreateHabitSchemas(BaseModel):
     name_habit: str
     description: str
+    alert_time: time
+
+
+class DeleteHabitSchemas(BaseModel):
+    id: int
+
+
+class PatchHabitSchemas(CreateHabitSchemas):
+    pass
+

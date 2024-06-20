@@ -3,10 +3,10 @@ from typing import List
 
 from pydantic import BaseModel
 
-from app.schemas.habits_sch import Habit
+from app.schemas.habits_sch import HabitSchemas
 
 
-class User(BaseModel):
+class UserSchemas(BaseModel):
     """Return response data"""
     id: int
     username: str
@@ -15,23 +15,23 @@ class User(BaseModel):
     is_active: bool
 
 
-class InfoUser(BaseModel):
+class InfoUserSchemas(BaseModel):
     """Return response data"""
     id: int
     username: str
     telegram_id: int
     is_active: bool
-    habits: List[Habit] = None
+    habits: List[HabitSchemas] = None
 
 
-class CreateUser(BaseModel):
+class CreateUserSchemas(BaseModel):
     """Return response data"""
     username: str
     password: str
     telegram_id: int
 
 
-class LoginUser(BaseModel):
+class LoginUserSchemas(BaseModel):
     """Return response data"""
     username: str
     password: str

@@ -1,10 +1,9 @@
 """module for filling data into a database"""
-from datetime import datetime
 
 from sqlalchemy.future import select
 
 from app.database.connect import engine, session
-from app.database.models import Habit, TrackingHabit, User
+from app.database.models import Habit, User
 
 
 async def filling_db() -> None:
@@ -15,10 +14,9 @@ async def filling_db() -> None:
             print("*" * 70)
 
             users = [
-                # User(id=1, username="top", hashed_password="pass1", telegram_id=1),
-                User(id=1, username="top", password="pass1", telegram_id=1),
-                User(id=2, username="money", password="pass2", telegram_id=2),
-                User(id=3, username="jonn", password="pass3", telegram_id=3, is_active=False),
+                User(id=1, username="top", hashed_password="pass1", telegram_id=1),
+                User(id=2, username="money", hashed_password="pass2", telegram_id=2),
+                User(id=3, username="jonn", hashed_password="pass3", telegram_id=3, is_active=False),
             ]
             session.add_all(users)
 
@@ -29,13 +27,5 @@ async def filling_db() -> None:
 
             ]
             session.add_all(habits)
-
-            tracking_habits = [
-                TrackingHabit(id=1, habit_id=1),
-                TrackingHabit(id=2, habit_id=2, count=5),
-                TrackingHabit(id=3, habit_id=3, count=10),
-
-            ]
-            session.add_all(tracking_habits)
 
             await session.commit()

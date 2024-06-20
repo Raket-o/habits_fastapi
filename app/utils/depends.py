@@ -4,8 +4,8 @@ from config_data.config import ALGORITHM, SECRET_KEY
 from fastapi import Depends, HTTPException, status
 from jwt.exceptions import InvalidTokenError
 from app.database.transactions import get_user_by_username_db
-from app.schemas.token_sch import TokenData
-from app.schemas.users_sch import InfoUser
+from app.schemas.token_sch import TokenDataSchemas
+from app.schemas.users_sch import InfoUserSchemas
 
 
 async def get_current_user(token: str):
@@ -19,7 +19,7 @@ async def get_current_user(token: str):
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception
-        token_data = TokenData(username=username)
+        token_data = TokenDataSchemas(username=username)
     except InvalidTokenError:
         raise credentials_exception
     user = await get_user_by_username_db(username=token_data.username)
@@ -29,7 +29,7 @@ async def get_current_user(token: str):
 
 
 async def get_current_active_user(
-    current_user: Annotated[InfoUser, Depends(get_current_user)],
+    current_user: Annotated[InfoUserSchemas, Depends(get_current_user)],
 ):
     if not current_user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")

@@ -19,12 +19,6 @@ async def create_db() -> None:
     await cursor.execute(f"CREATE DATABASE {db_name};")
 
 
-# async def get_list_books_db() -> list[Book]:
-#     """the function returns a list of books in database"""
-#     qs = await session.execute(select(Book))
-#     return qs.all()
-#
-#
 async def get_user_by_telegram_id_db(telegram_id: int) -> User:
     """ """
     qs = await session.execute(select(User).where(User.telegram_id == telegram_id))
@@ -38,7 +32,7 @@ async def get_user_by_username_db(username: str) -> User:
 
 
 async def create_user_db(dict_add_user) -> User:
-    """the function adds a new book in database"""
+    """the function adds a new habit in database"""
     user = User(**dict_add_user)
     session.add(user)
     await session.commit()
@@ -47,54 +41,31 @@ async def create_user_db(dict_add_user) -> User:
 
 async def get_list_habit_by_telegram_id_db(user_id: int) -> User:
     """the function returns a list of habits in database"""
-    print("get_list_habit_by_telegram_id_db", user_id)
     qs = await session.execute(select(Habit).where(Habit.user_id == user_id).order_by(Habit.user_id))
     return qs.all()
 
 
-async def create_habit_db(dict_add_habit) -> Habit:
+# async def create_habit_db(dict_add_habit: dict, alert_time: time) -> Habit:
+async def create_habit_db(dict_data: dict) -> Habit:
     """the function adds a new habit in database"""
-    habit = Habit(**dict_add_habit)
+    habit = Habit(**dict_data)
     session.add(habit)
     await session.commit()
     return habit
 
 
-# async def check_user_is_active_db(telegram_id: int) -> User:
-#     """the function adds a new book in database"""
-#     qs = await session.execute(select(User).where(User.telegram_id == telegram_id))
-#     return qs.scalar()
-#
-#
-# async def patch_book_db(id_book: int, obj_add_book) -> bool:
-#     """the function updates the book in database"""
-#     qs = await session.execute(update(Book).where(Book.id == id_book).values(obj_add_book))
-#     if qs:
-#         await session.commit()
-#         return True
-#
-#
-# async def delete_book_db(id_book: int) -> None:
-#     """the function deletes the book in database"""
-#     book = await session.execute(select(Book).where(Book.id == id_book))
-#     book = book.scalar()
-#     if book:
-#         await session.delete(book)
-#         await session.commit()
-#
-#
-# async def check_username_password_db(user) -> None:
-#     """checking for the existence of a user"""
-#     user = await session.execute(select(User).where(and_(User.username == str(user.username).lower(), User.password == user.password)))
-#     return user.scalar()
-#
-#
-# async def set_token_user(user: User, token: str) -> None:
-#     user.token = token
-#     await session.commit()
-#
-#
-# async def get_user_by_token(token: str) -> User:
-#     user = await session.execute(select(User).where(User.token == token))
-#     user = user.scalar()
-#     return user
+async def delete_habit_db(id_habit: int) -> None:
+    """the function deletes the habit in database"""
+    habit = await session.execute(select(Habit).where(Habit.id == id_habit))
+    habit = habit.scalar()
+    if habit:
+        await session.delete(habit)
+        await session.commit()
+
+
+async def patch_habit_db(id_habit: int, dict_patch_habit: dict) -> bool:
+    """the function updates the habit in database"""
+    qs = await session.execute(update(Habit).where(Habit.id == id_habit).values(dict_patch_habit).returning(Habit))
+    if qs:
+        await session.commit()
+        return qs.scalar()
