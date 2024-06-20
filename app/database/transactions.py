@@ -31,6 +31,12 @@ async def get_user_by_telegram_id_db(telegram_id: int) -> User:
     return qs.scalar()
 
 
+async def get_user_by_username(username: str) -> User:
+    """ """
+    qs = await session.execute(select(User).where(User.username == username))
+    return qs.scalar()
+
+
 async def create_user_db(dict_add_user) -> User:
     """the function adds a new book in database"""
     user = User(**dict_add_user)
