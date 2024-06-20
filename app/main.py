@@ -6,8 +6,10 @@ from contextlib import asynccontextmanager
 
 from app.database.connect import Base, engine, session
 from app.utils.filling_data_base import filling_db
-from app.api.user_api import router as user_router
 from app.api.auth_api import router as auth_router
+from app.api.habits_api import router as habits_router
+from app.api.user_api import router as user_router
+
 
 from config_data.config import DB_TESTS
 # from app.database.transactions import create_db
@@ -34,8 +36,9 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 api_router = APIRouter(prefix='/api')
-api_router.include_router(user_router)
 api_router.include_router(auth_router)
+api_router.include_router(user_router)
+api_router.include_router(habits_router)
 
 app.include_router(api_router)
 

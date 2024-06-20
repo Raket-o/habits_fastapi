@@ -1,48 +1,49 @@
-"""users routs processing module"""
+"""books routs processing module"""
 
 from fastapi import APIRouter, Depends
 
 from typing import Annotated
 
-from app.database.models import User
+from app.database.models import Habit
 from app.database.transactions import (
-    create_user_db,
+    get_list_habit_by_telegram_id_db,
+    create_habit_db,
 )
-from app.schemas.users_sch import CreateUser, InfoUser
-from app.schemas.token_sch import Token
+from app.schemas.habits_sch import CreateHabit, ListBooks
+from app.schemas.users_sch import InfoUser
+
 from app.utils.depends import get_current_active_user
 
-from app.utils.password_oper import coder_password
+
+router = APIRouter(prefix="/habits", tags=["habits"])
 
 
-router = APIRouter(prefix="/users", tags=["users"])
+@router.get(
+    path="/",
+    response_description="habits_sch.ListBooks",
+    response_model=ListBooks,
+    response_model_exclude_unset=True,
+    status_code=200
+)
+async def get_habits(
+    current_user: Annotated[InfoUser, Depends(get_current_active_user)],
+):
+    res = await get_list_habit_by_telegram_id_db(current_user.id)
+    return {"habits": [habit[0].to_json() for habit in res]}
 
 
 @router.post(
     path="/",
-    response_description="users_sch.GetUser",
-    response_model=InfoUser,
+    response_description="habits_sch.CreateHabit",
+    response_model=CreateHabit,
     status_code=201
 )
-async def create_user(data: CreateUser) -> User:
+async def create_habit(current_user: Annotated[InfoUser, Depends(get_current_active_user)], data: CreateHabit) -> Habit:
     """ """
     data = data.model_dump()
-    data["hashed_password"] = coder_password(data["password"])
-    data.pop("password")
-    user = await create_user_db(data)
-    return user.to_json()
-
-
-@router.get(
-    path="/me/",
-    response_description="users_sch.GetUser",
-    response_model=InfoUser,
-    status_code=200
-)
-async def read_user_me(
-    current_user: Annotated[InfoUser, Depends(get_current_active_user)],
-):
-    return current_user
+    data.update({"user_id": current_user.id})
+    habit = await create_habit_db(data)
+    return habit.to_json()
 
 
 # @router.get(

@@ -14,7 +14,6 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String(20), nullable=False)
-    # password = Column(String(200), nullable=False)
     hashed_password = Column(String(200), nullable=False)
     # telegram_id = Column(Integer, nullable=False, unique=True)
     telegram_id = Column(Integer, nullable=False)
@@ -41,7 +40,6 @@ class Habit(Base):
     name_habit = Column(String(20), nullable=False)
     description = Column(String(200), nullable=True)
 
-    # tracking_habit = relationship('TrackingHabit', backref='habits', cascade='all, delete')
     tracking_habit = relationship(
         "TrackingHabit",
         cascade="all, delete",
@@ -49,6 +47,9 @@ class Habit(Base):
         passive_deletes=True,
         lazy=True,
     )
+
+    def to_json(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
 class TrackingHabit(Base):
@@ -59,6 +60,9 @@ class TrackingHabit(Base):
     habit_id = Column(Integer, ForeignKey('habits.id', ondelete='CASCADE'), nullable=False)
     alert_time = Column(Time, nullable=True)
     count = Column(Integer, nullable=False, default=0)
+
+    def to_json(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
 # class Book(Base):

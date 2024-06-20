@@ -4,7 +4,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 from typing import Annotated
 
-from app.database.transactions import get_user_by_username
+from app.database.transactions import get_user_by_username_db
 from app.utils.token_oper import create_access_token
 from app.utils.password_oper import verify_password
 from app.schemas.token_sch import Token
@@ -16,7 +16,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token", scopes={})
 
 
 async def authenticate_user(username: str, password: str):
-    user = await get_user_by_username(username)
+    user = await get_user_by_username_db(username)
     if not user:
         return False
     if not verify_password(password, user.hashed_password):

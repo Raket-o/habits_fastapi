@@ -3,7 +3,7 @@ from typing import Annotated
 from config_data.config import ALGORITHM, SECRET_KEY
 from fastapi import Depends, HTTPException, status
 from jwt.exceptions import InvalidTokenError
-from app.database.transactions import get_user_by_username
+from app.database.transactions import get_user_by_username_db
 from app.schemas.token_sch import TokenData
 from app.schemas.users_sch import InfoUser
 
@@ -22,7 +22,7 @@ async def get_current_user(token: str):
         token_data = TokenData(username=username)
     except InvalidTokenError:
         raise credentials_exception
-    user = await get_user_by_username(username=token_data.username)
+    user = await get_user_by_username_db(username=token_data.username)
     if user is None:
         raise credentials_exception
     return user
