@@ -3,6 +3,8 @@ from typing import List
 
 from pydantic import BaseModel
 
+from app.schemas.habits_sch import Habit
+
 
 class User(BaseModel):
     """Return response data"""
@@ -19,6 +21,7 @@ class InfoUser(BaseModel):
     username: str
     telegram_id: int
     is_active: bool
+    habits: List[Habit] = None
 
 
 class CreateUser(BaseModel):
