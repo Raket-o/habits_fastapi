@@ -9,7 +9,7 @@ services:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=habits
-#    restart: always
+    restart: always
     ports:
       - "5434:${DB_PORT}"
     volumes: [ './postgresql_db/db/:/var/lib/postgresql_db/data/', './postgresql_db/db/:/logs/' ]
@@ -28,8 +28,6 @@ services:
 #    restart: always
 #    ports:
 #      - "8000:8000"
-##    volumes:
-##      - ./app/medias:/app/medias
 #    depends_on:
 #      - postgres_db
 #    networks:

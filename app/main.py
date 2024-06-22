@@ -21,12 +21,9 @@ async def lifespan(app: FastAPI):
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.drop_all)
             await conn.run_sync(Base.metadata.create_all)
-
     else:
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
-
-    # await filling_db()
 
     yield
     await session.close()
