@@ -10,13 +10,13 @@ from config_data.config import DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_TESTS,
 from app.database.models import Habit, User
 
 
-async def create_db() -> None:
-    """database creation function"""
-    db_name = "habits_tests" if DB_TESTS else DB_NAME
-    cursor = await asyncpg.connect(
-        f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}"
-    )
-    await cursor.execute(f"CREATE DATABASE {db_name};")
+# async def create_db() -> None:
+#     """database creation function"""
+#     db_name = "habits_tests" if DB_TESTS else DB_NAME
+#     cursor = await asyncpg.connect(
+#         f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}"
+#     )
+#     await cursor.execute(f"CREATE DATABASE {db_name};")
 
 
 async def get_user_by_telegram_id_db(telegram_id: int) -> User:
@@ -39,7 +39,7 @@ async def create_user_db(dict_add_user) -> User:
     return user
 
 
-async def get_list_habit_by_telegram_id_db(user_id: int) -> User:
+async def get_list_habit_by_telegram_id_db(user_id: int) -> Habit:
     """the function returns a list of habits in database"""
     qs = await session.execute(select(Habit).where(Habit.user_id == user_id).order_by(Habit.user_id))
     return qs.all()
@@ -54,18 +54,37 @@ async def create_habit_db(dict_data: dict) -> Habit:
     return habit
 
 
-async def delete_habit_db(id_habit: int) -> None:
+async def delete_habit_db(user_id: int, habit_id: int) -> None:
     """the function deletes the habit in database"""
-    habit = await session.execute(select(Habit).where(Habit.id == id_habit))
+    habit = await session.execute(select(Habit).where(Habit.user_id == user_id, Habit.id == habit_id))
     habit = habit.scalar()
     if habit:
         await session.delete(habit)
         await session.commit()
 
 
-async def patch_habit_db(id_habit: int, dict_patch_habit: dict) -> bool:
+async def patch_habit_db(user_id: int, habit_id: int, dict_patch_habit: dict) -> bool:
     """the function updates the habit in database"""
-    qs = await session.execute(update(Habit).where(Habit.id == id_habit).values(dict_patch_habit).returning(Habit))
+    print("patch_habit_db=="*2 , dict_patch_habit)
+    # dict_patch_habit = {'name_habit': None, 'description': 'patch_habit_db1', 'alert_time': None}
+    # dict_patch_habit = dict_patch_habit.copy()
+    dict_patch_habit = {k: v for k, v in dict_patch_habit.items() if v is not None}
+    # for key, val in dict_patch_habit.items():
+    #     if not val:
+    #         dict_patch_habit.pop(key)
+
+    qs = await session.execute(update(Habit).where(Habit.user_id == user_id, Habit.id == habit_id).values(dict_patch_habit).returning(Habit))
     if qs:
         await session.commit()
         return qs.scalar()
+
+
+async def fulfilling_habit_db(user_id: int, habit_id: int) -> Habit:
+    """the function updates the habit in database"""
+    # qs = await session.execute(select(Habit).where(Habit.user_id == user_id, Habit.id == habit_id))
+    qs = await session.execute(select(Habit).where(Habit.user_id == user_id).where(Habit.id == habit_id))
+    habit = qs.scalar()
+    if habit:
+        habit.count += 1
+        await session.commit()
+        return habit

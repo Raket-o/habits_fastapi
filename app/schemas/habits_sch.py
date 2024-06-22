@@ -1,5 +1,5 @@
 from datetime import time
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel
 
 
@@ -11,7 +11,7 @@ class HabitSchemas(BaseModel):
     count: int
 
 
-class ListBooksSchemas(BaseModel):
+class ListHabitsSchemas(BaseModel):
     """Validate request data"""
     habits: List[HabitSchemas]
 
@@ -26,6 +26,11 @@ class DeleteHabitSchemas(BaseModel):
     id: int
 
 
-class PatchHabitSchemas(CreateHabitSchemas):
-    pass
+class PatchHabitSchemas(BaseModel):
+    name_habit: Optional[str] = None
+    description: Optional[str] = None
+    alert_time: Optional[time] = None
 
+
+class FulfilHabitSchemas(DeleteHabitSchemas):
+    pass
