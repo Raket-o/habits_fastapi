@@ -35,7 +35,8 @@ DEF_HABIT = {
     status_code=200
 )
 async def get_habits(
-    current_user: Annotated[InfoUserSchemas, Depends(get_current_active_user)]) -> dict[str, list[Any]]:
+    current_user: Annotated[InfoUserSchemas, Depends(get_current_active_user)]
+) -> dict[str, list[Any]]:
     res = await get_list_habit_by_telegram_id_db(current_user.id)
     return {"habits": [habit[0].to_json() for habit in res]}
 

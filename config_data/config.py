@@ -19,3 +19,5 @@ DB_TESTS = True if os.getenv("DB_TESTS") == "True" else False
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
+
+BOT_TOKEN = os.getenv("BOT_TOKEN")

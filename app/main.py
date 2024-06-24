@@ -13,10 +13,12 @@ from app.api.user_api import router as user_router
 
 from config_data.config import DB_TESTS
 # from app.database.transactions import create_db
+# from app.utils.send_message_tg import send_message_tg
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # await send_message_tg()
     if DB_TESTS:
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.drop_all)
