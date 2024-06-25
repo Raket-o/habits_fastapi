@@ -45,6 +45,13 @@ async def get_list_habit_by_telegram_id_db(user_id: int) -> Habit:
     return qs.all()
 
 
+async def get_detail_habit_by_telegram_id_db(user_id: int, habit_id: int) -> Habit:
+    """the function returns a list of habits in database"""
+    qs = await session.execute(select(Habit).where(Habit.user_id == user_id).where(Habit.id == habit_id))
+    # return qs.first()
+    return qs.one_or_none()
+
+
 # async def create_habit_db(dict_add_habit: dict, alert_time: time) -> Habit:
 async def create_habit_db(dict_data: dict) -> Habit:
     """the function adds a new habit in database"""
@@ -56,7 +63,8 @@ async def create_habit_db(dict_data: dict) -> Habit:
 
 async def delete_habit_db(user_id: int, habit_id: int) -> None:
     """the function deletes the habit in database"""
-    habit = await session.execute(select(Habit).where(Habit.user_id == user_id, Habit.id == habit_id))
+    # habit = await session.execute(select(Habit).where(Habit.user_id == user_id, Habit.id == habit_id))
+    habit = await session.execute(select(Habit).where(Habit.user_id == user_id).where(Habit.id == habit_id))
     habit = habit.scalar()
     if habit:
         await session.delete(habit)
@@ -73,7 +81,8 @@ async def patch_habit_db(user_id: int, habit_id: int, dict_patch_habit: dict) ->
     #     if not val:
     #         dict_patch_habit.pop(key)
 
-    qs = await session.execute(update(Habit).where(Habit.user_id == user_id, Habit.id == habit_id).values(dict_patch_habit).returning(Habit))
+    # qs = await session.execute(update(Habit).where(Habit.user_id == user_id, Habit.id == habit_id).values(dict_patch_habit).returning(Habit))
+    qs = await session.execute(update(Habit).where(Habit.user_id == user_id).where(Habit.id == habit_id).values(dict_patch_habit).returning(Habit))
     if qs:
         await session.commit()
         return qs.scalar()

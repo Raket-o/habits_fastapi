@@ -9,6 +9,7 @@ from app.database.transactions import (
     create_habit_db,
     fulfilling_habit_db,
     patch_habit_db,
+    get_detail_habit_by_telegram_id_db,
 )
 from app.schemas.habits_sch import CreateHabitSchemas, DeleteHabitSchemas, ListHabitsSchemas, FulfilHabitSchemas, HabitSchemas, PatchHabitSchemas
 from app.schemas.users_sch import InfoUserSchemas
@@ -20,7 +21,7 @@ router = APIRouter(prefix="/habits", tags=["habits"])
 
 DEF_HABIT = {
     "id": 0,
-    "name_habit": "name_habit",
+    "habit_name": "habit_name",
     "description": "description",
     "alert_time": "00:00:00",
     "count": 0
@@ -39,6 +40,25 @@ async def get_habits(
 ) -> dict[str, list[Any]]:
     res = await get_list_habit_by_telegram_id_db(current_user.id)
     return {"habits": [habit[0].to_json() for habit in res]}
+
+
+@router.get(
+    path="/<int:habit_id>",
+    # path="/",
+    response_description="habits_sch.HabitsSchemas",
+    response_model=HabitSchemas,
+    status_code=200
+)
+async def get_details_habit(
+    current_user: Annotated[InfoUserSchemas, Depends(get_current_active_user)],
+    habit_id: int,
+) -> dict[str, int | str] | Any:
+    res = await get_detail_habit_by_telegram_id_db(current_user.id, habit_id)
+    print("+="*20, res)
+    if not res:
+        return DEF_HABIT
+    else:
+        return res[0].to_json()
 
 
 @router.post(
@@ -88,7 +108,7 @@ async def patch_habit(
 
 
 @router.post(
-    path="/fulfilling/<int:habit_id>",
+    path="/<int:habit_id>/fulfilling",
     response_description="habits_sch.FulfilHabitSchemas",
     response_model=HabitSchemas,
     status_code=201

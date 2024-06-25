@@ -35,7 +35,7 @@ class Habit(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
-    name_habit = Column(String(20), nullable=False)
+    habit_name = Column(String(20), nullable=False)
     description = Column(String(200), nullable=True)
     alert_time = Column(Time, nullable=True)
     count = Column(Integer, nullable=False, default=0)
