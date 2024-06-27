@@ -44,7 +44,6 @@ async def get_habits(
 
 @router.get(
     path="/<int:habit_id>",
-    # path="/",
     response_description="habits_sch.HabitsSchemas",
     response_model=HabitSchemas,
     status_code=200

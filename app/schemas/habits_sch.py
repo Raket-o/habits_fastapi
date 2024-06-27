@@ -32,5 +32,5 @@ class PatchHabitSchemas(BaseModel):
     alert_time: Optional[time] = None
 
 
-class FulfilHabitSchemas(DeleteHabitSchemas):
-    pass
+class FulfilHabitSchemas(BaseModel):
+    id: int

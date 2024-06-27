@@ -97,3 +97,25 @@ async def fulfilling_habit_db(user_id: int, habit_id: int) -> Habit:
         habit.count += 1
         await session.commit()
         return habit
+
+
+async def remove_old_habits_db() -> None:
+    """the function removes old habits in database"""
+    # qs = await session.execute(select(Habit).where(Habit.user_id == user_id, Habit.id == habit_id))
+    qs = await session.execute(select(Habit).where(Habit.count >= 21))
+    habits = qs.all()
+    if habits:
+        for habit in habits:
+            await session.delete(habit[0])
+
+        await session.commit()
+
+
+async def get_habits_by_time_db(region_time) -> list[(Habit, User)]:
+    """the function removes old habits in database"""
+    # qs = await session.execute(select(Habit).where(Habit.user_id == user_id, Habit.id == habit_id))
+    print("get_habits_by_time_db=", region_time)
+    qs = await session.execute(select(Habit, User).join(User, User.id == Habit.user_id).where(Habit.alert_time == region_time))
+    # qs = await session.execute(select(Habit))
+    habits = qs.all()
+    return habits

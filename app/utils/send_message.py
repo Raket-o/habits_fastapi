@@ -3,23 +3,22 @@ import json
 
 from config_data.config import BOT_TOKEN
 
-async def send_message_tg():
-# async def send_message_tg(habit_id: int, chat_id: int):
+
+async def send_message_tg(telegram_id: int, habit_id: int, habit_name: str) -> None:
     url = f'https://api.telegram.org/bot{BOT_TOKEN}/sendMessage'
 
-    habit_id = 1
-    callback_data_habit_id = f"habit_id{habit_id}"
+    txt = f"Вы выполнили свою привычку: {habit_name}?"
 
     kb = {
         "inline_keyboard": [
             [
                 {
                     "text": "да",
-                    "callback_data": callback_data_habit_id
+                    "callback_data": f"completed_habit={habit_id}"
                 },
                 {
                     "text": "нет",
-                    "callback_data": "register_hand_1"
+                    "callback_data": f"did_not_completed_habit={habit_id}"
                 },
             ]
         ]
@@ -29,11 +28,11 @@ async def send_message_tg():
     kb = kb.replace(' ', '')
 
     params = {
-        "chat_id": 5203073246,
-        "text": "Test",
+        "chat_id": telegram_id,
+        "text": txt,
         "reply_markup": kb
     }
 
     async with aiohttp.ClientSession() as session:
-        async with session.get(f"{url}", params=params) as response:
+        async with session.get(url=f"{url}", params=params) as response:
             print(await response.json())

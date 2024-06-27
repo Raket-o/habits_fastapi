@@ -27,6 +27,12 @@ async def lifespan(app: FastAPI):
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
 
+    from app.utils.schedule import schedule
+    # await schedule()
+
+    # from app.database.transactions import remove_old_habits_db
+    # await remove_old_habits_db()
+
     yield
     await session.close()
     await engine.dispose()
