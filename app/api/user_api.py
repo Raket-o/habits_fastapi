@@ -3,7 +3,6 @@ from fastapi import APIRouter, Depends
 
 from typing import Annotated
 
-from app.database.models import User
 from app.database.transactions import (
     create_user_db,
     get_list_habit_by_telegram_id_db,

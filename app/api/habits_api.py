@@ -1,7 +1,7 @@
 """habits routs processing module"""
 from fastapi import APIRouter, Depends
 
-from typing import Annotated, Dict, Any, List
+from typing import Annotated, Any
 
 from app.database.transactions import (
     delete_habit_db,
@@ -11,7 +11,7 @@ from app.database.transactions import (
     patch_habit_db,
     get_detail_habit_by_telegram_id_db,
 )
-from app.schemas.habits_sch import CreateHabitSchemas, DeleteHabitSchemas, ListHabitsSchemas, FulfilHabitSchemas, HabitSchemas, PatchHabitSchemas
+from app.schemas.habits_sch import CreateHabitSchemas, ListHabitsSchemas, HabitSchemas, PatchHabitSchemas
 from app.schemas.users_sch import InfoUserSchemas
 
 from app.utils.depends import get_current_active_user
@@ -19,7 +19,7 @@ from app.utils.depends import get_current_active_user
 
 router = APIRouter(prefix="/habits", tags=["habits"])
 
-DEF_HABIT = {
+DEF_HABIT: dict = {
     "id": 0,
     "habit_name": "habit_name",
     "description": "description",
@@ -38,6 +38,7 @@ DEF_HABIT = {
 async def get_habits(
     current_user: Annotated[InfoUserSchemas, Depends(get_current_active_user)]
 ) -> dict[str, list[Any]]:
+    """the router returns the habits of the current user"""
     res = await get_list_habit_by_telegram_id_db(current_user.id)
     return {"habits": [habit[0].to_json() for habit in res]}
 
@@ -52,8 +53,8 @@ async def get_details_habit(
     current_user: Annotated[InfoUserSchemas, Depends(get_current_active_user)],
     habit_id: int,
 ) -> dict[str, int | str] | Any:
+    """the router returns the details of the habit"""
     res = await get_detail_habit_by_telegram_id_db(current_user.id, habit_id)
-    print("+="*20, res)
     if not res:
         return DEF_HABIT
     else:
@@ -70,7 +71,7 @@ async def create_habit(
         current_user: Annotated[InfoUserSchemas, Depends(get_current_active_user)],
         data: CreateHabitSchemas
 ) -> dict:
-    """ """
+    """the router creates new habits"""
     data = data.model_dump()
     data.update({"user_id": current_user.id})
     data["alert_time"] = data["alert_time"].replace(second=0, microsecond=0)
@@ -83,7 +84,7 @@ async def delete_habit(
         current_user: Annotated[InfoUserSchemas, Depends(get_current_active_user)],
         habit_id: int,
 ) -> None:
-    """the function deletes the habit"""
+    """the router deletes the habit"""
     await delete_habit_db(current_user.id, habit_id)
 
 
@@ -96,7 +97,7 @@ async def patch_habit(
         habit_id: int,
         data: PatchHabitSchemas
 ) -> dict[str, int | str] | bool:
-    """the function updates the habit"""
+    """the router updates the habit"""
     dict_data = data.model_dump()
     if dict_data.get("alert_time"):
         dict_data["alert_time"] = dict_data["alert_time"].replace(second=0, microsecond=0)
@@ -117,7 +118,7 @@ async def fulfilling_habit(
         Depends(get_current_active_user)],
         habit_id: int,
 ) -> dict[Any, Any] | bool:
-    """the function fulfilling a habit"""
+    """the router fulfilling a habit"""
     res = await fulfilling_habit_db(current_user.id, habit_id)
     if not res:
         return DEF_HABIT

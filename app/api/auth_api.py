@@ -17,6 +17,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token", scopes={})
 
 
 async def authenticate_user(username: str, password: str):
+    """the function checks if the user is authenticated"""
     user = await get_user_by_username_db(username)
     if not user:
         return False
@@ -29,6 +30,7 @@ async def authenticate_user(username: str, password: str):
 async def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
 ) -> TokenSchemas:
+    """the function returns a token if the username and password are correct"""
     user = await authenticate_user(form_data.username, form_data.password)
     if not user:
         raise HTTPException(
