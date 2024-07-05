@@ -30,13 +30,13 @@ async def lifespan(app: FastAPI):
         await create_db()
 
 
-    if DB_TESTS:
-        async with engine.begin() as conn:
-            await conn.run_sync(Base.metadata.drop_all)
-            await conn.run_sync(Base.metadata.create_all)
-    else:
-        async with engine.begin() as conn:
-            await conn.run_sync(Base.metadata.create_all)
+    # if DB_TESTS:
+    #     async with engine.begin() as conn:
+    #         # await conn.run_sync(Base.metadata.drop_all)
+    #         await conn.run_sync(Base.metadata.create_all)
+    # else:
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
 
     from app.utils.schedule import schedule
     # await schedule()

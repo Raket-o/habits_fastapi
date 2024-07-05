@@ -23,18 +23,18 @@ services:
       app_fastapi_network:
         ipv4_address: 192.168.55.4
 
-  app:
-    build: .
-    container_name: fastapi
-    stop_signal: SIGKILL
-    restart: always
-    ports:
-      - "8000:8000"
-    depends_on:
-      - postgres_db
-    networks:
-      app_fastapi_network:
-        ipv4_address: 192.168.55.5
+#  app:
+#    build: .
+#    container_name: fastapi
+#    stop_signal: SIGKILL
+#    restart: always
+#    ports:
+#      - "8000:8000"
+#    depends_on:
+#      - postgres_db
+#    networks:
+#      app_fastapi_network:
+#        ipv4_address: 192.168.55.5
 
 
 networks:

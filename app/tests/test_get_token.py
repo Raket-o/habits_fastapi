@@ -64,64 +64,152 @@ TOKEN_DATA: str = ""
 import pytest
 
 
-class TestDemo(object):
-    def setup_method(self):
-        print("Setup_Method")
-        with TestClient(app) as client:
-            response = client.post(
-                url="api/users",
-                json=USER_DATA,
+# class TestDemo(object):
+#     def setup_method(self):
+#         print("Setup_Method")
+#         with TestClient(app) as client:
+#             response = client.post(
+#                 url="api/users",
+#                 json=USER_DATA,
+#
+#             )
+#
+#         self.id = response.json()["id"]
+#         self.username = response.json()["username"]
+#
+#
+#
+#         with TestClient(app) as client:
+#             user_data = USER_DATA.copy()
+#             # user_data = user_data.pop("telegram_id")
+#             user_data.pop("telegram_id")
+#             print("user_data=================================", user_data)
+#
+#             response = client.post(
+#                 url="api/auth/token",
+#                 json=user_data,
+#                 # data=user_data,
+#
+#             )
+#             print(response.json())
+#             # assert response.status_code == 200
+#             self.access_token = response.json()["access_token"]
+#
+#
+#     def test_get_token_ok(self):
+#         with TestClient(app) as client:
+#             print("test_get_token_ok", self.id, self.username, self.access_token)
+#
+#             user_data = USER_DATA.copy()
+#             # user_data = user_data.pop("telegram_id")
+#             user_data.pop("telegram_id")
+#             print("user_data=================================", user_data)
+#
+#             response = client.post(
+#                 url="api/auth/token",
+#                 # json=user_data,
+#                 data=user_data,
+#                 # auth=user_data
+#             )
+#             print(response.json())
+#             assert response.status_code == 200
+#
+#     def teardown_method(self):
+#         # print("Execute Teardown_Method", self.id, self.username)
+#         print("Execute Teardown_Method")
 
-            )
-
-        self.id = response.json()["id"]
-        self.username = response.json()["username"]
+import asyncio
 
 
+async def drop_db():
+    from app.database.connect import Base, engine
 
-        with TestClient(app) as client:
-            user_data = USER_DATA.copy()
-            # user_data = user_data.pop("telegram_id")
-            user_data.pop("telegram_id")
-            print("user_data=================================", user_data)
-
-            response = client.post(
-                url="api/auth/token",
-                json=user_data,
-                # data=user_data,
-
-            )
-            print(response.json())
-            # assert response.status_code == 200
-            self.access_token = response.json()["access_token"]
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.drop_all)
 
 
-    def test_get_token_ok(self):
-        with TestClient(app) as client:
-            print("test_get_token_ok", self.id, self.username, self.access_token)
+@pytest.fixture
+def context():
+    """What to do before/after the test."""
+    print("Entering !")
 
-            user_data = USER_DATA.copy()
-            # user_data = user_data.pop("telegram_id")
-            user_data.pop("telegram_id")
-            print("user_data=================================", user_data)
+    # def setup_method(self):
 
-            response = client.post(
-                url="api/auth/token",
-                # json=user_data,
-                data=user_data,
-                # auth=user_data
-            )
-            print(response.json())
-            assert response.status_code == 200
+    print("Setup_Method")
+    with TestClient(app) as client:
+        response = client.post(
+            url="api/users",
+            json=USER_DATA,
 
-    def teardown_method(self):
-        # print("Execute Teardown_Method", self.id, self.username)
-        print("Execute Teardown_Method")
+        )
+
+    print(response.json())
+
+    id = response.json()["id"]
+    username = response.json()["username"]
+
+    yield
+    print("Exiting !")
+    print(response.json())
+
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(drop_db())
 
 
-        # print("Execute test case 1")
+def test_get_token_ok(context):
+    """The actual code of your test"""
+    print("Running the test")
+    with TestClient(app) as client:
+        user_data = USER_DATA.copy()
+        user_data.pop("telegram_id")
+        print("user_data=================================", user_data)
 
-        # assert 1 + 1 == 2
+        response = client.post(
+            url="api/auth/token",
+            data=user_data,
+        )
+        print(response.json())
+
+        access_token = response.json().get("access_token")
+        assert response.status_code == 200
+
+
+def test_get_token_invalid_username(context):
+    """The actual code of your test"""
+    print("Running the test")
+
+    # def test_get_token_ok(self):
+    with TestClient(app) as client:
+        user_data = USER_DATA.copy()
+        user_data.pop("telegram_id")
+        user_data["username"] = "33"
+
+        response = client.post(
+            url="api/auth/token",
+            data=user_data,
+        )
+        # print(response.json())
+        assert response.status_code == 401
+
+
+def test_get_token_invalid_password(context):
+    """The actual code of your test"""
+    print("Running the test")
+
+    # def test_get_token_ok(self):
+    with TestClient(app) as client:
+        user_data = USER_DATA.copy()
+        user_data.pop("telegram_id")
+        user_data["password"] = "33"
+
+        response = client.post(
+            url="api/auth/token",
+            data=user_data,
+        )
+        # print(response.json())
+        assert response.status_code == 401
+
 
     # def test_case2(self):
     #     print("Execute test case 2")
