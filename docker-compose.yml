@@ -1,6 +1,6 @@
 #docker-compose.yml
-#version: "3.5"
-version: "2"
+version: "3.7"
+#version: "2"
 
 services:
   postgres_db:
@@ -9,11 +9,12 @@ services:
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=habits
     restart: always
     ports:
       - "5434:${DB_PORT}"
-    volumes: [ './postgresql_db/db/:/var/lib/postgresql_db/data/', './postgresql_db/db/:/logs/' ]
+    volumes:
+      - ./postgresql_db/db/:/var/lib/postgresql_db/data/
+      - ./postgresql_db/db/:/logs/
 #    command: ["postgres", "-c", "log_destination=stderr", "-c", "logging_collector=on", "-c", "log_directory=/logs", "-c", "log_filename=postgresql.log", "-c", "log_statement=all"]
     command: ["postgres", "-c", "log_statement=all"]
     expose:

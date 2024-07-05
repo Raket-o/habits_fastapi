@@ -10,13 +10,13 @@ from config_data.config import DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_TESTS,
 from app.database.models import Habit, User
 
 
-# async def create_db() -> None:
-#     """database creation function"""
-#     db_name = "habits_tests" if DB_TESTS else DB_NAME
-#     cursor = await asyncpg.connect(
-#         f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}"
-#     )
-#     await cursor.execute(f"CREATE DATABASE {db_name};")
+async def create_db() -> None:
+    """database creation function"""
+    db_name = "habits_tests" if DB_TESTS else DB_NAME
+    cursor = await asyncpg.connect(
+        f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}"
+    )
+    await cursor.execute(f"CREATE DATABASE {db_name};")
 
 
 async def get_user_by_telegram_id_db(telegram_id: int) -> User:
