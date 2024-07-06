@@ -9,7 +9,8 @@ from .fixtures import fixture_context
 from .test_user_opers import USER_DATA
 
 
-TOKEN_DATA: str = ""
+ACCESS_TOKEN: str = ""
+
 
 
 # def setup_function():
@@ -123,7 +124,7 @@ def test_create_habit_ok(fixture_context):
             data=user_data,
         )
 
-        access_token = response.json().get("access_token")
+        ACCESS_TOKEN = response.json().get("access_token")
         assert response.status_code == 200
 
 

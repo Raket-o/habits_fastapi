@@ -18,7 +18,7 @@ async def drop_db():
 
 
 @pytest.fixture
-def fixture_context():
+def fixture_create_user():
     print("Entering !")
 
     with TestClient(app) as client:
