@@ -18,6 +18,7 @@ from config_data.config import DB_TESTS
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    print("lifespan========"*10)
     from asyncpg.exceptions import InvalidCatalogNameError
     # await send_message_tg()
     from app.database.transactions import create_db
@@ -32,7 +33,7 @@ async def lifespan(app: FastAPI):
 
     # if DB_TESTS:
     #     async with engine.begin() as conn:
-    #         # await conn.run_sync(Base.metadata.drop_all)
+    #         await conn.run_sync(Base.metadata.drop_all)
     #         await conn.run_sync(Base.metadata.create_all)
     # else:
     async with engine.begin() as conn:

@@ -5,9 +5,6 @@ from app.main import app
 from fastapi.testclient import TestClient
 
 
-# from fastapi import FastAPI
-# app = FastAPI()
-
 USER_DATA = {
     "username": "test",
     "password": "test_password",
