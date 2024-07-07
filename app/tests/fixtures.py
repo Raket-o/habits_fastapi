@@ -17,6 +17,12 @@ async def drop_db():
     await engine.dispose()
 
 
+def run_async_drop_db():
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(drop_db())
+
+
 @pytest.fixture
 def fixture_create_user():
     print("Entering !")
@@ -28,7 +34,9 @@ def fixture_create_user():
         )
 
     yield
+    #
+    # loop = asyncio.new_event_loop()
+    # asyncio.set_event_loop(loop)
+    # loop.run_until_complete(drop_db())
 
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    loop.run_until_complete(drop_db())
+    run_async_drop_db()
