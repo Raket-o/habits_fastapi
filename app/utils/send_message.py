@@ -36,5 +36,5 @@ async def send_message_tg(telegram_id: int, habit_id: int, habit_name: str) -> N
     }
 
     async with aiohttp.ClientSession() as session:
-        async with session.get(url=f"{url}", params=params) as response:
-            print(await response.json())
+        async with session.get(url=f"{url}", params=params) as _:
+            pass

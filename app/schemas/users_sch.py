@@ -15,7 +15,6 @@ class UserSchemas(BaseModel):
 
 
 class InfoUserSchemas(BaseModel):
-    """Return response data"""
     id: int
     username: str
     telegram_id: int
@@ -24,13 +23,11 @@ class InfoUserSchemas(BaseModel):
 
 
 class CreateUserSchemas(BaseModel):
-    """Return response data"""
     username: str
     password: str
     telegram_id: int
 
 
 class LoginUserSchemas(BaseModel):
-    """Return response data"""
     username: str
     password: str
