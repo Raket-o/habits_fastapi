@@ -1,16 +1,16 @@
 """the main module"""
-import uvicorn
 
-from asyncpg.exceptions import InvalidCatalogNameError
-
-from fastapi import FastAPI, APIRouter
 from contextlib import asynccontextmanager
 
-from app.database.connect import Base, engine, session
-from app.database.transactions import create_db
+import uvicorn
+from asyncpg.exceptions import InvalidCatalogNameError
+from fastapi import APIRouter, FastAPI
+
 from app.api.auth_api import router as auth_router
 from app.api.habits_api import router as habits_router
 from app.api.user_api import router as user_router
+from app.database.connect import Base, engine, session
+from app.database.transactions import create_db
 from app.utils import schedule
 
 
@@ -34,7 +34,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-api_router = APIRouter(prefix='/api')
+api_router = APIRouter(prefix="/api")
 api_router.include_router(auth_router)
 api_router.include_router(user_router)
 api_router.include_router(habits_router)

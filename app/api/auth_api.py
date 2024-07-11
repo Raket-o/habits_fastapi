@@ -1,15 +1,14 @@
 """auth routs processing module"""
-from fastapi import APIRouter,  HTTPException, Depends, status
-
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 from typing import Annotated
 
-from app.database.transactions import get_user_by_username_db
-from app.utils.token_oper import create_access_token
-from app.utils.password_oper import verify_password
-from app.schemas.token_sch import TokenSchemas
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
+from app.database.transactions import get_user_by_username_db
+from app.schemas.token_sch import TokenSchemas
+from app.utils.password_oper import verify_password
+from app.utils.token_oper import create_access_token
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 

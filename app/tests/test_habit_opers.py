@@ -1,19 +1,18 @@
 """the habits test module"""
+
+from fastapi.testclient import TestClient
 from httpx import Response
 
 from app.main import app
 
-from fastapi.testclient import TestClient
-
 from .fixtures import login, register_user, run_async_drop_db
 from .test_user_opers import USER_DATA
 
-
-DATA_HABIT:dict = {
-        "habit_name": "name_test",
-        "description": "description_test",
-        "alert_time": "12:14:03.061Z"
-    }
+DATA_HABIT: dict = {
+    "habit_name": "name_test",
+    "description": "description_test",
+    "alert_time": "12:14:03.061Z",
+}
 
 
 def create_habit(access_token) -> Response:
@@ -35,6 +34,7 @@ def create_habit(access_token) -> Response:
 
 class TestCaseHabit(object):
     """the class of the habit test suite"""
+
     def setup_method(self) -> None:
         register_user()
         self.access_token = login()
@@ -53,11 +53,7 @@ class TestCaseHabit(object):
     def test_get_habit_ok(self) -> None:
         response = create_habit(self.access_token)
         habit_id = response.json()["id"]
-        params = {
-            "token": self.access_token,
-            "habit_id":  habit_id
-
-        }
+        params = {"token": self.access_token, "habit_id": habit_id}
         with TestClient(app) as client:
             response = client.get(
                 url="api/habits/<int:habit_id>",
@@ -69,11 +65,7 @@ class TestCaseHabit(object):
 
     def test_get_habit_fail(self) -> None:
         response = create_habit(self.access_token)
-        params = {
-            "token": self.access_token,
-            "habit_id":  100
-
-        }
+        params = {"token": self.access_token, "habit_id": 100}
         with TestClient(app) as client:
             response = client.get(
                 url="api/habits/<int:habit_id>",
@@ -89,15 +81,11 @@ class TestCaseHabit(object):
     def test_path_habit_ok(self) -> None:
         response = create_habit(self.access_token)
         habit_id = response.json()["id"]
-        params = {
-            "token": self.access_token,
-            "habit_id":  habit_id
-
-        }
+        params = {"token": self.access_token, "habit_id": habit_id}
         data = {
             "habit_name": "name_test_edit",
             "description": "name_test_edit",
-            "alert_time": "12:10:03.061Z"
+            "alert_time": "12:10:03.061Z",
         }
 
         with TestClient(app) as client:
@@ -114,10 +102,7 @@ class TestCaseHabit(object):
     def test_comp_habit_ok(self) -> None:
         response = create_habit(self.access_token)
         habit_id = response.json()["id"]
-        params = {
-            "token": self.access_token,
-            "habit_id":  habit_id
-        }
+        params = {"token": self.access_token, "habit_id": habit_id}
 
         with TestClient(app) as client:
             response = client.post(
@@ -131,10 +116,7 @@ class TestCaseHabit(object):
     def test_delete_habit_ok(self) -> None:
         response = create_habit(self.access_token)
         habit_id = response.json()["id"]
-        params = {
-            "token": self.access_token,
-            "habit_id":  habit_id
-        }
+        params = {"token": self.access_token, "habit_id": habit_id}
 
         with TestClient(app) as client:
             response = client.delete(

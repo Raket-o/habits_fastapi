@@ -1,10 +1,11 @@
 """the token test module"""
+
 from fastapi.testclient import TestClient
 
 from app.main import app
 
-from .test_user_opers import USER_DATA
 from .fixtures import fixture_create_user
+from .test_user_opers import USER_DATA
 
 
 def test_get_token_ok(fixture_create_user) -> None:

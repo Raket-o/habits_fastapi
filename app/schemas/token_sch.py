@@ -1,4 +1,5 @@
 """the schematics module for answering about the token"""
+
 from pydantic import BaseModel
 
 

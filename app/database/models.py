@@ -1,14 +1,15 @@
 """the module for creating tables"""
+
 from sqlalchemy import Boolean, Column, ForeignKey, Time
 from sqlalchemy.orm import relationship
-from sqlalchemy.types import Integer, String, BIGINT
+from sqlalchemy.types import BIGINT, Integer, String
 
 from app.database.connect import Base
 
 
 class User(Base):
     __tablename__ = "users"
-    __table_args__ = {'extend_existing': True}
+    __table_args__ = {"extend_existing": True}
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String(20), nullable=False)
@@ -31,10 +32,12 @@ class User(Base):
 
 class Habit(Base):
     __tablename__ = "habits"
-    __table_args__ = {'extend_existing': True}
+    __table_args__ = {"extend_existing": True}
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    user_id = Column(
+        Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
     habit_name = Column(String(20), nullable=False)
     description = Column(String(200), nullable=True)
     alert_time = Column(Time, nullable=True)

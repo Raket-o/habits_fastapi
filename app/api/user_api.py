@@ -1,16 +1,16 @@
 """users routs processing module"""
-from fastapi import APIRouter, Depends
 
 from typing import Annotated
 
+from fastapi import APIRouter, Depends
+
 from app.database.transactions import (
     create_user_db,
-    get_list_habit_by_telegram_id_db,
+    get_list_habit_by_telegram_id_db
 )
 from app.schemas.users_sch import CreateUserSchemas, InfoUserSchemas
 from app.utils.depends import get_current_active_user
 from app.utils.password_oper import coder_password
-
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -19,7 +19,7 @@ router = APIRouter(prefix="/users", tags=["users"])
     path="/",
     response_description="users_sch.GetUser",
     response_model=InfoUserSchemas,
-    status_code=201
+    status_code=201,
 )
 async def create_user(data: CreateUserSchemas) -> dict:
     """the router creates a user"""
@@ -34,7 +34,7 @@ async def create_user(data: CreateUserSchemas) -> dict:
     path="/me/",
     response_description="users_sch.GetUser",
     response_model=InfoUserSchemas,
-    status_code=200
+    status_code=200,
 )
 async def read_user_me(
     current_user: Annotated[InfoUserSchemas, Depends(get_current_active_user)],

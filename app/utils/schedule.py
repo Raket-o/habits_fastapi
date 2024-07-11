@@ -1,14 +1,16 @@
 """queue manager module"""
+
 import logging
+from datetime import datetime, timedelta, timezone
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-
-from datetime import datetime, timezone, timedelta
-
-from app.database.transactions import get_habits_by_time_db, remove_old_habits_db
-from app.utils.send_message import send_message_tg
-
 from config_data.config import LOCAL_UTC
+
+from app.database.transactions import (
+    get_habits_by_time_db,
+    remove_old_habits_db
+)
+from app.utils.send_message import send_message_tg
 
 logger = logging.getLogger(__name__)
 
@@ -23,10 +25,14 @@ async def schedule_job():
     try:
         if LOCAL_UTC:
             if LOCAL_UTC[0] == "+":
-                region_datetime = current_datetime + timedelta(hours=int(LOCAL_UTC[1]))
+                region_datetime = current_datetime + timedelta(
+                    hours=int(LOCAL_UTC[1])
+                )
 
             elif LOCAL_UTC[0] == "-":
-                region_datetime = current_datetime - timedelta(hours=int(LOCAL_UTC[1]))
+                region_datetime = current_datetime - timedelta(
+                    hours=int(LOCAL_UTC[1])
+                )
     except ValueError:
         pass
 

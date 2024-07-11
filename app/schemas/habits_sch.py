@@ -1,6 +1,8 @@
 """the schematics module for answering about the habit"""
+
 from datetime import time
 from typing import List, Optional
+
 from pydantic import BaseModel
 
 
