@@ -6,7 +6,6 @@ from config_data.config import DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_USER, 
 
 
 db_name = "habits_tests" if DB_TESTS else DB_NAME
-# print("*=-"*100,db_name)
 engine = create_async_engine(
     f"postgresql+asyncpg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{db_name}"
 )

@@ -1,3 +1,4 @@
+"""dependency module"""
 import jwt
 from typing import Annotated
 from config_data.config import ALGORITHM, SECRET_KEY
@@ -9,6 +10,7 @@ from app.schemas.users_sch import InfoUserSchemas
 
 
 async def get_current_user(token: str):
+    """the function returns the current user"""
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -31,6 +33,7 @@ async def get_current_user(token: str):
 async def get_current_active_user(
     current_user: Annotated[InfoUserSchemas, Depends(get_current_user)],
 ):
+    """the function of checking whether the user is active"""
     if not current_user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user

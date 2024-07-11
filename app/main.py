@@ -5,7 +5,7 @@ from fastapi import FastAPI, APIRouter
 from contextlib import asynccontextmanager
 
 from app.database.connect import Base, engine, session
-from app.utils.filling_data_base import filling_db
+# from app.utils.filling_data_base import filling_db
 from app.api.auth_api import router as auth_router
 from app.api.habits_api import router as habits_router
 from app.api.user_api import router as user_router

@@ -7,7 +7,6 @@ from app.schemas.habits_sch import HabitSchemas
 
 
 class UserSchemas(BaseModel):
-    """Return response data"""
     id: int
     username: str
     hashed_password: str

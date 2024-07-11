@@ -117,7 +117,7 @@ async def fulfilling_habit(
         current_user : Annotated[InfoUserSchemas,
         Depends(get_current_active_user)],
         habit_id: int,
-) -> dict[Any, Any] | bool:
+) -> dict[Any, Any]:
     """the router fulfilling a habit"""
     res = await fulfilling_habit_db(current_user.id, habit_id)
     if not res:

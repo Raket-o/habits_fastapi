@@ -22,7 +22,7 @@ router = APIRouter(prefix="/users", tags=["users"])
     status_code=201
 )
 async def create_user(data: CreateUserSchemas) -> dict:
-    """ """
+    """the router creates a user"""
     data = data.model_dump()
     data["hashed_password"] = coder_password(data["password"])
     data.pop("password")
@@ -39,6 +39,7 @@ async def create_user(data: CreateUserSchemas) -> dict:
 async def read_user_me(
     current_user: Annotated[InfoUserSchemas, Depends(get_current_active_user)],
 ) -> dict:
+    """the router returns information about the user"""
     res = await get_list_habit_by_telegram_id_db(current_user.id)
     habits = [habit[0].to_json() for habit in res]
 

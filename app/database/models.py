@@ -14,7 +14,7 @@ class User(Base):
     username = Column(String(20), nullable=False)
     hashed_password = Column(String(200), nullable=False)
     # telegram_id = Column(Integer, nullable=False, unique=True)
-    telegram_id = Column(BIGINT, nullable=False)
+    telegram_id = Column(Integer, nullable=False)
     is_active = Column(Boolean, default=True)
 
     habit = relationship(
@@ -25,7 +25,7 @@ class User(Base):
         lazy=True,
     )
 
-    def to_json(self):
+    def to_json(self) -> dict:
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
@@ -40,5 +40,5 @@ class Habit(Base):
     alert_time = Column(Time, nullable=True)
     count = Column(Integer, nullable=False, default=0)
 
-    def to_json(self):
+    def to_json(self) -> dict:
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
