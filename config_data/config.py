@@ -1,4 +1,4 @@
-"""Модуль конфиг для проверки создано ли окружение."""
+"""the config module is used to check whether the environment has been created"""
 import os
 
 from dotenv import find_dotenv, load_dotenv

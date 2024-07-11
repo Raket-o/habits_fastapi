@@ -1,3 +1,4 @@
+"""the message sending module"""
 import aiohttp
 import json
 
@@ -5,6 +6,7 @@ from config_data.config import BOT_TOKEN
 
 
 async def send_message_tg(telegram_id: int, habit_id: int, habit_name: str) -> None:
+    """the function of sending messages to telegram"""
     url = f'https://api.telegram.org/bot{BOT_TOKEN}/sendMessage'
 
     txt = f"Вы выполнили свою привычку: {habit_name}?"

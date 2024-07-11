@@ -1,6 +1,5 @@
 #docker-compose.yml
 version: "3.7"
-#version: "2"
 
 services:
   postgres_db:
