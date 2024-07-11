@@ -14,7 +14,7 @@ class User(Base):
     username = Column(String(20), nullable=False)
     hashed_password = Column(String(200), nullable=False)
     # telegram_id = Column(Integer, nullable=False, unique=True)
-    telegram_id = Column(Integer, nullable=False)
+    telegram_id = Column(BIGINT, nullable=False)
     is_active = Column(Boolean, default=True)
 
     habit = relationship(

@@ -11,6 +11,7 @@ from app.database.transactions import create_db
 from app.api.auth_api import router as auth_router
 from app.api.habits_api import router as habits_router
 from app.api.user_api import router as user_router
+from app.utils import schedule
 
 
 @asynccontextmanager

@@ -1,4 +1,6 @@
 """queue manager module"""
+import logging
+
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from datetime import datetime, timezone, timedelta
@@ -8,9 +10,13 @@ from app.utils.send_message import send_message_tg
 
 from config_data.config import LOCAL_UTC
 
+logger = logging.getLogger(__name__)
+
 
 async def schedule_job():
     """queue function"""
+    await remove_old_habits_db()
+
     current_datetime = datetime.now(timezone.utc)
     region_datetime = current_datetime
 
@@ -25,10 +31,8 @@ async def schedule_job():
         pass
 
     region_time = region_datetime.time()
+    print(f"region_time= {region_time}")
     region_time = region_time.replace(second=0, microsecond=0)
-
-    if region_time.hour == 0 and region_time.minute == 0:
-        await remove_old_habits_db()
 
     habits = await get_habits_by_time_db(region_time)
     if habits:
