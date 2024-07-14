@@ -12,9 +12,8 @@ class User(Base):
     __table_args__ = {"extend_existing": True}
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    username = Column(String(20), nullable=False)
-    hashed_password = Column(String(200), nullable=False)
-    # telegram_id = Column(Integer, nullable=False, unique=True)
+    username = Column(String(100), nullable=False)
+    hashed_password = Column(String(300), nullable=False)
     telegram_id = Column(BIGINT, nullable=False)
     is_active = Column(Boolean, default=True)
 
@@ -38,8 +37,8 @@ class Habit(Base):
     user_id = Column(
         Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False
     )
-    habit_name = Column(String(20), nullable=False)
-    description = Column(String(200), nullable=True)
+    habit_name = Column(String(200), nullable=False)
+    description = Column(String(400), nullable=True)
     alert_time = Column(Time, nullable=True)
     count = Column(Integer, nullable=False, default=0)
 
